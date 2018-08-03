@@ -177,16 +177,13 @@ sed -i 's|/usr/bin/env python|/usr/bin/python3|g' %{name}/waf
     '--enable-ladspa'
     '--enable-libbs2b'
     '--enable-libgme'
-    '--enable-libmysofa'
     '--enable-libsoxr'
     '--enable-libssh'
     '--enable-libx264'
-    '--enable-libx265'
     '--enable-libxvid'
     '--enable-libmp3lame'
     '--enable-libtwolame'
     '--enable-libass'
-    '--enable-libbluray'
     '--enable-libvpx'
     '--enable-libvorbis'
     '--enable-libopus'
@@ -196,6 +193,15 @@ sed -i 's|/usr/bin/env python|/usr/bin/python3|g' %{name}/waf
     '--enable-openssl'
     '--enable-gpl'
     '--enable-nonfree'
+    '--disable-runtime-cpudetect'
+    '--arch=arm'
+    '--cpu=armv7-a'
+    '--enable-vfpv3'
+    '--enable-thumb'
+    '--enable-mmal'
+    '--enable-omx'
+    '--enable-omx-rpi'
+    '--enable-neon'
     )
 
 _mpv_options=(
@@ -208,25 +214,19 @@ _mpv_options=(
     '--disable-build-date'
     '--enable-libmpv-shared'
     '--enable-sdl2'
-    '--enable-dvdread'
-    '--enable-dvdnav'
     '--enable-cdda'
     '--enable-dvb'
     '--enable-libarchive'
     '--enable-zsh-comp'
     '--disable-lgpl'
-%if 0%{?fedora} >= 28
-    '--enable-wayland'
-    '--enable-wayland-scanner'
-    '--enable-wayland-protocols'
-    '--enable-gl-wayland'
-    '--enable-vaapi-wayland'
-%endif
+    '--enable-egl-x11'
+    '--disable-vaapi'
+    '--enable-rpi'
 )
 
+echo ${_ffmpeg_options[@]} > ffmpeg_options
+echo ${_mpv_options[@]} > mpv_options
 
-  echo ${_ffmpeg_options[@]} > ffmpeg_options
-  echo ${_mpv_options[@]} > mpv_options
 
 ./rebuild -j4
 
