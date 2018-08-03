@@ -1,13 +1,15 @@
+# globals for mpv
+%global mpv_commit  ca73b609f6e15885f648b58f4de539105439bff6
+%global mpv_short   %(c=%{mpv_commit}; echo ${c:0:7})
+%global gver        .git%{mpv_short}
+
 # globals for mpv-build
-%global commit1 7608d209c3c32c8192feeee51b67c22547a1eb35
+%global bld_commit  7608d209c3c32c8192feeee51b67c22547a1eb35
+%global bld_short   %(c=%{bld_commit}; echo ${c:0:7})
 
 # globals for ffmpeg
-%global commit2 0a155c57bd8eb92ccaf7f5857dc6ab276d235846
-
-#globals for mpv
-%global commit0 ca73b609f6e15885f648b58f4de539105439bff6
-%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
-%global gver .git%{shortcommit0}
+%global ffpg_commit 0a155c57bd8eb92ccaf7f5857dc6ab276d235846
+%global ffpg_short   %(c=%{ffpg_commit}; echo ${c:0:7})
 
 # globals for waf (required for mpv)
 %global waf_release 2.0.9
@@ -17,22 +19,21 @@
 
 %bcond_with system_libass
 
-
-Name:           mpv
-Version:        0.29.0
-Epoch:		1
-Release:        1%{?gver}%{dist}
-Summary:        Movie player playing most video formats and DVDs
-License:        GPLv2+
-URL:            http://%{name}.io/
-Source0:        https://github.com/mpv-player/mpv-build/archive/%{commit1}.tar.gz#/mpv-build.tar.gz
-Source1:	https://github.com/mpv-player/mpv/archive/%{commit0}.tar.gz#/%{name}.tar.gz
-Source2:	https://github.com/FFmpeg/FFmpeg/archive/%{commit2}.tar.gz#/ffmpeg.tar.gz
-Source3:	https://waf.io/waf-%{waf_release}
-Source4:	https://github.com/libass/libass/releases/download/%{libass_release}/libass-%{libass_release}.tar.gz
-Patch1:		libass_fix.patch
-Patch2:		python_fix.patch
+Name:       mpv
+Version:    0.29.0
+Release:    1%{?gver}%{dist}
+Summary:    Movie player playing most video formats and DVDs
+License:    GPLv2+
+URL:        http://%{name}.io
+Source0:    https://github.com/mpv-player/mpv-build/archive/%{bld_commit}.tar.gz#/mpv-build-%{bld_short}.tar.gz
+Source1:    https://github.com/mpv-player/mpv/archive/%{mpv_commit}.tar.gz#/%{name}-%{mpv_short}.tar.gz
+Source2:    https://github.com/FFmpeg/FFmpeg/archive/%{ffpg_commit}.tar.gz#/ffmpeg-%{ffpg_short}.tar.gz
+Source3:    https://waf.io/waf-%{waf_release}
+Source4:    https://github.com/libass/libass/releases/download/%{libass_release}/libass-%{libass_release}.tar.gz
 Patch:      use_tarball.patch
+Patch1:     libass_fix.patch
+Patch2:     python_fix.patch
+ExclusiveArch: armv7hl
 
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  desktop-file-utils
@@ -116,55 +117,54 @@ input URL types are available to read input from a variety of sources other
 than disk files. Depending on platform, a variety of different video and audio
 output methods are supported.
 
+
 %package libs
 Summary: Dynamic library for Mpv frontends
-Provides: %{name}-libs = %{version}-%{release} 
-Provides: libmpv = 1:%{version}-%{release}
-
+Provides: %{name}-libs = %{version}-%{release}
+Provides: libmpv = %{version}-%{release}
 
 %description libs
 This package contains the dynamic library libmpv, which provides access to Mpv.
 
+
 %package libs-devel
 Summary: Development package for libmpv
-Provides: %{name}-devel = 1:%{version}-%{release} 
+Provides: %{name}-devel = %{version}-%{release}
 Requires: mpv = %{version}-%{release}
 Provides: libmpv-devel = %{version}-%{release}
 Provides: %{name}-libs-devel = %{version}-%{release}
 
-
 %description libs-devel
 Libmpv development header files and libraries.
 
+
 %prep
-%setup -n mpv-build-%{commit1} -a1 -a2 -a4
+%setup -n mpv-build-%{bld_commit} -a1 -a2 -a4
 %patch -p1
 %patch1 -p1
 
-mv -f %{name}-%{commit0} $PWD/%{name}
-mv -f FFmpeg-%{commit2} $PWD/ffmpeg
+mv -f %{name}-%{mpv_commit} %{name}
+mv -f FFmpeg-%{ffpg_commit} ffmpeg
 cp -f %{name}/LICENSE.GPL %{name}/Copyright $PWD/
 %patch2 -p1
 
-# Sorry we need avoid to compile some packages
+### Sorry we need avoid to compile some packages
 %if %{with system_libass}
-mv -f libass-0.14.0 $PWD/libass
-sed -i 's|1.15|1.16|g' $PWD/libass/aclocal.m4
-sed -i 's|1.15|1.16|g' $PWD/libass/configure
+mv -f libass-0.14.0 libass
+sed -i 's|1.15|1.16|g' libass/aclocal.m4
+sed -i 's|1.15|1.16|g' libass/configure
 %else
 sed -i 's|scripts/libass-config|#scripts/libass-config|g' build
 sed -i 's|scripts/libass-build|#scripts/libass-build|g' build
 %endif
 
-cp -f %{SOURCE3} $PWD/%{name}/waf
-chmod a+x $PWD/%{name}/waf
-sed -i 's|/usr/bin/env python|/usr/bin/python3|g' $PWD/%{name}/waf
+cp -f %{SOURCE3} %{name}/waf
+chmod a+x %{name}/waf
+sed -i 's|/usr/bin/env python|/usr/bin/python3|g' %{name}/waf
 
-#--------------------------------------------------------------
 
 %build
-
-# Set ffmpeg/libass/mpv flags
+### Set ffmpeg/libass/mpv flags
   _ffmpeg_options=(
     '--disable-programs'
     '--enable-ladspa'
@@ -225,7 +225,6 @@ _mpv_options=(
 
 
 %install
-
 echo '#!/bin/sh
 set -e
 
@@ -240,23 +239,24 @@ pushd mpv
 install -Dpm 644 README.md etc/input.conf etc/mpv.conf -t %{buildroot}%{_docdir}/%{name}
 popd
 
+
 %post
 /usr/bin/update-desktop-database &> /dev/null || :
-/bin/touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
+
 
 %postun
 /usr/bin/update-desktop-database &> /dev/null || :
-if [ $1 -eq 0 ] ; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
-    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &> /dev/null || :
-fi
+
 
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &> /dev/null || :
 
+
 %post libs -p /sbin/ldconfig
 
+
 %postun libs -p /sbin/ldconfig
+
 
 %files
 %docdir %{_docdir}/%{name}
@@ -272,9 +272,11 @@ fi
 %{_mandir}/man1/mpv.1.gz
 %endif
 
+
 %files libs
 %license LICENSE.GPL Copyright
 %{_libdir}/libmpv.so.*
+
 
 %files libs-devel
 %{_includedir}/%{name}
