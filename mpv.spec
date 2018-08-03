@@ -30,9 +30,9 @@ Source1:	https://github.com/mpv-player/mpv/archive/%{commit0}.tar.gz#/%{name}.ta
 Source2:	https://github.com/FFmpeg/FFmpeg/archive/%{commit2}.tar.gz#/ffmpeg.tar.gz
 Source3:	https://waf.io/waf-%{waf_release}
 Source4:	https://github.com/libass/libass/releases/download/%{libass_release}/libass-%{libass_release}.tar.gz
-Patch:		_usetarball.patch
 Patch1:		libass_fix.patch
 Patch2:		python_fix.patch
+Patch:      use_tarball.patch
 
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  desktop-file-utils
