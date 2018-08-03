@@ -37,24 +37,18 @@ ExclusiveArch: armv7hl
 
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig(dvdnav)
-BuildRequires:  pkgconfig(dvdread)
 BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(enca)
-#BuildRequires:  ffmpeg-devel
 BuildRequires:  pkgconfig(gbm)
 BuildRequires:  pkgconfig(gl)
-BuildRequires:  pkgconfig(jack)
 BuildRequires:  pkgconfig(lcms2)
 BuildRequires:  pkgconfig(libarchive)
 BuildRequires:  pkgconfig(libass)
-BuildRequires:  pkgconfig(libbluray)
 BuildRequires:  pkgconfig(libcdio)
 BuildRequires:  pkgconfig(libcdio_paranoia)
 BuildRequires:  pkgconfig(libdrm)
 BuildRequires:  pkgconfig(libguess)
 BuildRequires:  libjpeg-turbo-devel
-BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(libv4l2)
 BuildRequires:  pkgconfig(libquvi-0.9)
 BuildRequires:  pkgconfig(libva)
@@ -65,16 +59,7 @@ BuildRequires:  pkgconfig(rubberband)
 BuildRequires:  pkgconfig(smbclient)
 BuildRequires:  pkgconfig(uchardet) >= 0.0.5
 BuildRequires:  pkgconfig(vdpau)
-%if 0%{?fedora} >= 28
-BuildRequires:  pkgconfig(wayland-client)
-BuildRequires:  pkgconfig(wayland-cursor)
-BuildRequires:  wayland-devel
-BuildRequires:	wayland-protocols-devel
-BuildRequires:  pkgconfig(wayland-egl)
-BuildRequires:  pkgconfig(wayland-scanner)
-%endif
 BuildRequires:  pkgconfig(x11)
-BuildRequires:  pkgconfig(vulkan)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xinerama)
 BuildRequires:  pkgconfig(xkbcommon)
@@ -83,32 +68,54 @@ BuildRequires:  pkgconfig(xscrnsaver)
 BuildRequires:  pkgconfig(xv)
 BuildRequires:  pkgconfig(zlib)
 BuildRequires:  python-docutils
-
 BuildRequires:  perl(Math::BigInt)
 BuildRequires:  perl(Math::BigRat)
 BuildRequires:  perl(Encode)
 
+### libass
 %if %{with system_libass}
-BuildRequires:	enca-devel 
-BuildRequires:	fontconfig-devel 
-BuildRequires:	fribidi-devel 
-BuildRequires:	harfbuzz-devel 
+BuildRequires:	enca-devel
+BuildRequires:	fontconfig-devel
+BuildRequires:	fribidi-devel
+BuildRequires:	harfbuzz-devel
 BuildRequires:	libpng-devel
 BuildRequires:	automake >= 1.16.1
 BuildRequires:	autoconf
 %endif
 
-# ffmpeg
-BuildRequires:	xvidcore-devel x264-devel lame-devel twolame-devel twolame-devel yasm ladspa-devel libbs2b-devel libmysofa-devel game-music-emu-devel soxr-devel libssh-devel libvpx-devel libvorbis-devel opus-devel libtheora-devel freetype-devel
-BuildRequires: x265-devel >= 2.8
+### ffmpeg
+BuildRequires:  xvidcore-devel
+BuildRequires:  x264-devel
+BuildRequires:  lame-devel
+BuildRequires:  twolame-devel
+BuildRequires:  yasm
+BuildRequires:  ladspa-devel
+BuildRequires:  libbs2b-devel
+BuildRequires:  game-music-emu-devel
+BuildRequires:  soxr-devel
+BuildRequires:  libssh-devel
+BuildRequires:  libvpx-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  opus-devel
+BuildRequires:  libtheora-devel
+BuildRequires:  freetype-devel
+BuildRequires:  git
+BuildRequires:  autoconf
+BuildRequires:  make
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  python3-devel
 
-BuildRequires:	git autoconf make automake libtool
-BuildRequires:	python3-devel
+### RPi mmal / omx support
+BuildRequires:  raspberrypi-vc-libs-devel
+BuildRequires:  raspberrypi-vc-libs
+BuildRequires:  raspberrypi-vc-static
+BuildRequires:  libomxil-bellagio-devel
 
-Requires:       hicolor-icon-theme
-Requires: 	mpv-libs = %{version}-%{release}
-Provides:       mplayer-backend
-Provides: 	mpv = %{version}-%{release}
+Requires:   hicolor-icon-theme
+Requires:   mpv-libs = %{version}-%{release}
+Provides:   mplayer-backend
+Provides:   mpv = %{version}-%{release}
 
 %description
 Mpv is a movie player based on MPlayer and mplayer2. It supports a wide variety
