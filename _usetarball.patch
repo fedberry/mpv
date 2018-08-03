@@ -1,0 +1,149 @@
+--- a/update	2017-12-06 02:05:15.000000000 -0600
++++ b/update-1	2018-01-15 21:13:53.718629000 -0600
+@@ -1,146 +1,10 @@
+ #!/bin/sh
+ export LC_ALL=C
+ 
+-do_clone()
+-{
+-    set -ex
+-    if ! test -e "$1" ; then
+-        git clone "$2" "$1"
+-    fi
+-    (
+-        cd "$1"
+-        git remote set-url origin "$2"
+-        git fetch
+-    )
+-}
+-
+-do_clone_all()
+-{
+-    do_clone "ffmpeg"   "https://github.com/FFmpeg/FFmpeg.git"
+-    #do_clone "fribidi"  "http://anongit.freedesktop.org/git/fribidi/fribidi.git"
+-    do_clone "libass"   "https://github.com/libass/libass.git"
+-    do_clone "mpv"      "https://github.com/mpv-player/mpv.git"
+-}
+-
+-do_gitmaster()
+-{
+-    set -ex
+-    (
+-        cd "$1"
+-        git checkout origin/master
+-        git remote prune origin
+-    )
+-}
+-
+-versort_with_prefix()
+-{
+-	# Emulate sort -V using a known prefix. Filter out anything else.
+-	sed -n -e "s/^$1\([0-9]\)/\\1/p" |\
+-		sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 |\
+-		sed -e "s/^/$1/"
+-	# GNU version of the same:
+-	# grep "^$2[0-9]" | sort -V
+-}
+-
+-do_releasetag()
+-{
+-    local prefix=  # by default, don't use a prefix
+-    case "$1" in
+-        ffmpeg) prefix=n;;  # e.g. n3.3.1
+-        mpv)    prefix=v;;  # e.g. v0.26.0
+-    esac
+-
+-    (
+-        cd "$1"
+-        version=`git tag | grep -v rc | grep -v dev | versort_with_prefix "$prefix" | tail -n 1`
+-        git checkout refs/tags/"$version"
+-    )
+-}
+-
+-do_fixedref()
+-{
+-    (
+-        cd "$1"
+-        git checkout "$2"
+-    )
+-}
+-
+-# args: $1: project name, $2: release/master/@foo [,$3: non-empty to ignore the config file]
+-checkout()
+-{
+-    local branch="$2"
+-    if [ -z "$3" ] && [ -d config/ ] && [ -f config/branch-$1 ]; then
+-        branch="$(cat config/branch-$1)"
+-    fi
+-
+-    case "$branch" in
+-        master)  do_gitmaster $1;;
+-        release) do_releasetag $1;;
+-        @*)      do_fixedref $1 "${branch#@}";;  # everything after the '@' prefix
+-        *)       >&2 printf "%s\n" "Error: Don't know how to checkout '$branch'"
+-                 return 1
+-    esac
+-}
+-
+-# fallback targets: release/master/@foo if no config file
+-checkout_ffmpeg=master
+-#checkout_fribidi=release
+-checkout_libass=master
+-checkout_mpv=master
+-
+-
+-checkout_all()
+-{
+-    set -ex
+-    do_clone_all
+-    checkout ffmpeg $checkout_ffmpeg
+-    #$checkout fribidi $checkout_fribidi
+-    checkout libass $checkout_libass
+-    checkout mpv $checkout_mpv
+-}
+-
+ do_bootstrap()
+ {
+   scripts/mpv-bootstrap
+ }
+ 
+-do_update_debian_versions()
+-{
+-  scripts/debian-update-versions $1
+-}
+-
+-if [ x"$1" != x"--skip-selfupdate" ]; then
+-    (
+-        set -ex
+-        git pull --rebase
+-    )
+-    exec "$0" --skip-selfupdate "$@"
+-fi
+-shift
+-
+-# allow checkout master/release without checking the config files
+-case "$1" in
+-    --master)
+-        checkout_ffmpeg="master -"
+-        #checkout_fribidi="master -"
+-        checkout_libass="master -"
+-        checkout_mpv="master -"
+-        ;;
+-    --release)
+-        checkout_ffmpeg="release -"
+-        checkout_mpv="release -"
+-        ;;
+-    '')
+-        ;;
+-    *)
+-        echo >&2 "$0 --master"
+-        echo >&2 "$0 --release"
+-        exit 0
+-        ;;
+-esac
+-
+-checkout_all
+-
+-do_update_debian_versions
+ 
+ do_bootstrap

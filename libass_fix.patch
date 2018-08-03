@@ -1,0 +1,28 @@
+--- a/scripts/libass-config	2017-12-06 02:05:15.000000000 -0600
++++ b/scripts/libass-config-new	2018-05-21 09:00:56.921650841 -0600
+@@ -8,17 +8,22 @@
+     OPTIONS="$OPTIONS --with-pic"
+ fi
+ 
++if [ `getconf LONG_BIT` = "64" ]; then
++libdir=lib64
++else
++libdir=lib
++fi
++
+ case "$PKG_CONFIG_PATH" in
+   '')
+-    export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig"
++    export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig:/usr/$libdir/pkgconfig"
+     ;;
+   *)
+-    export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig:$PKG_CONFIG_PATH"
++    export PKG_CONFIG_PATH="$BUILD/build_libs/lib/pkgconfig:$PKG_CONFIG_PATH:/usr/$libdir/pkgconfig"
+     ;;
+ esac
+ 
+ cd "$BUILD"/libass
+ # Later libass doesn't automatically run configure with autogen.sh anymore
+-./autogen.sh --prefix="$BUILD/build_libs" --libdir="$BUILD/build_libs/lib" --enable-static --disable-shared $OPTIONS
+ ./configure  --prefix="$BUILD/build_libs" --libdir="$BUILD/build_libs/lib" --enable-static --disable-shared $OPTIONS
+ 

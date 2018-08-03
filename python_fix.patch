@@ -1,0 +1,78 @@
+diff -ruN orig/mpv/bootstrap.py new/bootstrap.py
+--- orig/mpv/bootstrap.py	2018-07-22 10:46:25.000000000 -0600
++++ new/bootstrap.py	2018-07-25 11:11:37.268317661 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ # This script simply downloads waf to the current directory
+ 
+diff -ruN orig/mpv/TOOLS/dylib-unhell.py new/TOOLS/dylib-unhell.py
+--- orig/mpv/TOOLS/dylib-unhell.py	2018-07-22 10:46:25.000000000 -0600
++++ new/TOOLS/dylib-unhell.py	2018-07-25 11:11:11.865067326 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ import re
+ import os
+diff -ruN orig/mpv/TOOLS/file2string.py new/TOOLS/file2string.py
+--- orig/mpv/TOOLS/file2string.py	2018-07-22 10:46:25.000000000 -0600
++++ new/TOOLS/file2string.py	2018-07-25 11:10:50.698858746 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ # Convert the contents of a file into a C string constant.
+ # Note that the compiler will implicitly add an extra 0 byte at the end
+diff -ruN orig/mpv/TOOLS/matroska.py new/TOOLS/matroska.py
+--- orig/mpv/TOOLS/matroska.py	2018-07-22 10:46:25.000000000 -0600
++++ new/TOOLS/matroska.py	2018-07-25 11:13:40.724534248 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python3
++#!/usr/bin/python3
+ """
+ Generate C definitions for parsing Matroska files.
+ Can also be used to directly parse Matroska files and display their contents.
+diff -ruN orig/mpv/TOOLS/osxbundle.py new/TOOLS/osxbundle.py
+--- orig/mpv/TOOLS/osxbundle.py	2018-07-22 10:46:25.000000000 -0600
++++ new/TOOLS/osxbundle.py	2018-07-25 11:12:06.313603885 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ import os
+ import shutil
+diff -ruN orig/mpv/TOOLS/umpv new/TOOLS/umpv
+--- orig/mpv/TOOLS/umpv	2018-07-22 10:46:25.000000000 -0600
++++ new/TOOLS/umpv	2018-07-25 11:13:08.595217633 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ 
+ """
+ This script emulates "unique application" functionality on Linux. When starting
+diff -ruN orig/mpv/waftools/clang_compilation_database.py new/waftools/clang_compilation_database.py
+--- orig/mpv/waftools/clang_compilation_database.py	2018-07-22 10:46:25.000000000 -0600
++++ new/waftools/clang_compilation_database.py	2018-07-25 11:12:39.504930965 -0600
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # encoding: utf-8
+ # Christoph Koke, 2013
+ # Original source: waflib/extras/clang_compilation_database.py from
+diff -ruN orig/mpv/waftools/__init__.py new/waftools/__init__.py
+--- orig/mpv/waftools/__init__.py	2018-07-22 10:46:25.000000000 -0600
++++ new/waftools/__init__.py	2018-07-25 11:09:47.929240191 -0600
+@@ -1,2 +1,2 @@
+-#!/usr/bin/env python
++#!/usr/bin/python3
+ # encoding: utf-8
+diff -ruN orig/mpv/waftools/syms.py new/waftools/syms.py
+--- orig/mpv/waftools/syms.py	2018-07-22 10:46:25.000000000 -0600
++++ new/waftools/syms.py	2018-07-25 11:10:16.537522108 -0600
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python
++#! /usr/bin/python3
+ # encoding: utf-8
+ # Original source: waflib/extras/syms.py from waf git 610d0d59f (New BSD License)
