@@ -227,6 +227,9 @@ _mpv_options=(
 echo ${_ffmpeg_options[@]} > ffmpeg_options
 echo ${_mpv_options[@]} > mpv_options
 
+export LIBRARY_PATH=/usr/lib/vc
+export PKG_CONFIG_PATH=/usr/lib/vc/pkgconfig
+export CPATH=/usr/include/vc/include
 
 ./rebuild -j4
 
