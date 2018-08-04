@@ -21,7 +21,7 @@
 
 Name:       mpv
 Version:    0.29.0
-Release:    1%{?gver}%{dist}
+Release:    2%{?gver}%{dist}
 Summary:    Movie player playing most video formats and DVDs
 License:    GPLv2+
 URL:        http://%{name}.io
@@ -30,6 +30,7 @@ Source1:    https://github.com/mpv-player/mpv/archive/%{mpv_commit}.tar.gz#/%{na
 Source2:    https://github.com/FFmpeg/FFmpeg/archive/%{ffpg_commit}.tar.gz#/ffmpeg-%{ffpg_short}.tar.gz
 Source3:    https://waf.io/waf-%{waf_release}
 Source4:    https://github.com/libass/libass/releases/download/%{libass_release}/libass-%{libass_release}.tar.gz
+Source5:    mpv-rpi.desktop
 Patch:      use_tarball.patch
 Patch1:     libass_fix.patch
 Patch2:     python_fix.patch
@@ -244,10 +245,24 @@ chmod a+x scripts/mpv-install
 
 ./install
 
-desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 pushd mpv
 install -Dpm 644 README.md etc/input.conf etc/mpv.conf -t %{buildroot}%{_docdir}/%{name}
 popd
+
+
+### desktop file modifications
+# Launching mpv from the menu is useless on RPi as you don't get a usable window.
+# As a compromise, force video output to X11, yes its SLOW but at least it works.
+# h264 video is still partially accelerated (via h264_mmal) but gets ugly above 720p
+# (or when resizing) due to slow x11 video output.
+sed -i 's|mpv --player-operation-mode=pseudo-gui|mpv -vo=x11 --player-operation-mode=pseudo-gui|' \
+%{buildroot}%{_datadir}/applications/%{name}.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
+
+# Full RPi hardware acceleration is achieved via an overlay (ie no windows possible).
+# In this case its best to force fullscreen playback and use a black background.
+%{__install} -p %{SOURCE5} %{buildroot}/%{_datadir}/applications/
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}-rpi.desktop
 
 
 %post
@@ -273,7 +288,7 @@ popd
 %{_docdir}/%{name}
 %license LICENSE.GPL Copyright
 %{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
+%{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}*.*
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/encoding-profiles.conf
@@ -295,6 +310,10 @@ popd
 
 
 %changelog
+* Sat Aug 04 2018 Vaughan Agrez <devel at agrez dot net> 0.29.0-2.gitca73b60
+- Modify default desktop file (use -vo=x11)
+- Add 'full screen' desktop file (for full hardware acceleration)
+
 * Fri Aug 03 2018 Vaughan Agrez <devel at agrez dot net> 0.29.0-1.gitca73b60
 - Import into Fedberry (thanks UnitedRPMS)
 - Refactor spec (armv7hl only build now)
