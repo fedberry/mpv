@@ -166,6 +166,9 @@ cp -f %{SOURCE3} %{name}/waf
 chmod a+x %{name}/waf
 sed -i 's|/usr/bin/env python|/usr/bin/python3|g' %{name}/waf
 
+### Link against Broadcom's GLESV2 libs
+sed -i 's|GLESv2|brcmGLESv2|g' %{name}/wscript
+
 
 %build
 ### Set ffmpeg/libass/mpv flags
