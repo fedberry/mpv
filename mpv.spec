@@ -38,7 +38,6 @@ ExclusiveArch: armv7hl
 
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(enca)
 BuildRequires:  pkgconfig(gbm)
 BuildRequires:  pkgconfig(gl)
@@ -52,14 +51,11 @@ BuildRequires:  pkgconfig(libguess)
 BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  pkgconfig(libv4l2)
 BuildRequires:  pkgconfig(libquvi-0.9)
-BuildRequires:  pkgconfig(libva)
 BuildRequires:  pkgconfig(lua-5.1)
 BuildRequires:  pkgconfig(openssl)
-BuildRequires:  pkgconfig(sdl2)
 BuildRequires:  pkgconfig(rubberband)
 BuildRequires:  pkgconfig(smbclient)
 BuildRequires:  pkgconfig(uchardet) >= 0.0.5
-BuildRequires:  pkgconfig(vdpau)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xinerama)
@@ -214,14 +210,11 @@ _mpv_options=(
     '--confdir=%{_sysconfdir}/%{name}'
     '--disable-build-date'
     '--enable-libmpv-shared'
-    '--enable-sdl2'
     '--enable-cdda'
     '--enable-dvb'
     '--enable-libarchive'
     '--enable-zsh-comp'
     '--disable-lgpl'
-    '--enable-egl-x11'
-    '--disable-vaapi'
     '--enable-rpi'
 )
 
