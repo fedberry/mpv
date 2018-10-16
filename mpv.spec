@@ -1,5 +1,5 @@
 # globals for mpv
-%global mpv_commit  ca73b609f6e15885f648b58f4de539105439bff6
+%global mpv_commit  723fd02919bb3a1249d0566a70cc4d448a1e8ae6
 %global mpv_short   %(c=%{mpv_commit}; echo ${c:0:7})
 %global gver        .git%{mpv_short}
 
@@ -20,8 +20,8 @@
 %bcond_with system_libass
 
 Name:       mpv
-Version:    0.29.0
-Release:    2%{?gver}%{dist}
+Version:    0.29.1
+Release:    1%{?gver}%{dist}
 Summary:    Movie player playing most video formats and DVDs
 License:    GPLv2+
 URL:        http://%{name}.io
