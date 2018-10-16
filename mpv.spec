@@ -152,7 +152,7 @@ mv -f FFmpeg-%{ffpg_commit} ffmpeg
 cp -f %{name}/LICENSE.GPL %{name}/Copyright $PWD/
 %patch2 -p1
 
-### Sorry we need avoid to compile some packages
+### We need to avoid compiling some packages
 %if %{with system_libass}
 mv -f libass-0.14.0 libass
 sed -i 's|1.15|1.16|g' libass/aclocal.m4
@@ -264,17 +264,10 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}-rpi.desktop
 %post
 /usr/bin/update-desktop-database &> /dev/null || :
 
-
 %postun
 /usr/bin/update-desktop-database &> /dev/null || :
 
-
-%posttrans
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &> /dev/null || :
-
-
 %post libs -p /sbin/ldconfig
-
 
 %postun libs -p /sbin/ldconfig
 
@@ -306,6 +299,11 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}-rpi.desktop
 
 
 %changelog
+* Sun Oct 14 2018 Vaughan Agrez <devel at agrez dot net> 0.29.1-1.git723fd02
+- New release
+- Ensure linking against Broadcom's GLESV2 libs
+- Drop %%posttrans script
+
 * Sat Aug 04 2018 Vaughan Agrez <devel at agrez dot net> 0.29.0-2.gitca73b60
 - Modify default desktop file (use -vo=x11)
 - Add 'full screen' desktop file (for full hardware acceleration)
