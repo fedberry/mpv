@@ -21,7 +21,7 @@
 
 Name:       mpv
 Version:    0.29.1
-Release:    1%{?gver}%{dist}
+Release:    2%{?gver}%{dist}
 Summary:    Movie player playing most video formats and DVDs
 License:    GPLv2+
 URL:        http://%{name}.io
@@ -166,9 +166,6 @@ cp -f %{SOURCE3} %{name}/waf
 chmod a+x %{name}/waf
 sed -i 's|/usr/bin/env python|/usr/bin/python3|g' %{name}/waf
 
-### Link against Broadcom's GLESV2 libs
-sed -i 's|GLESv2|brcmGLESv2|g' %{name}/wscript
-
 
 %build
 ### Set ffmpeg/libass/mpv flags
@@ -299,6 +296,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}-rpi.desktop
 
 
 %changelog
+* Wed Oct 31 2018 Vaughan Agrez <devel at agrez dot net> 0.29.1-2.git723fd02
+- Revert brcmGLESv2 linking modifications
+
 * Sun Oct 14 2018 Vaughan Agrez <devel at agrez dot net> 0.29.1-1.git723fd02
 - New release
 - Ensure linking against Broadcom's GLESV2 libs
